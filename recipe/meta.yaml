@@ -10,14 +10,15 @@ source:
   sha256: e77f1365667e9cf8b6fbb0fc0de725a6045ee4b42220c3e6f863adace6c4033f
 
 build:
-  skip: true  # [py<37]
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<37]
 
 requirements:
   host:
     - python
     - pip
+    - wheel
     - setuptools
   run:
     - python
@@ -31,18 +32,31 @@ requirements:
     - grpc-google-iam-v1 >=0.14.0,<1.0.0
 
 test:
+  source_files:
+    - tests
   imports:
     - google
   commands:
     - pip check
+    - pytest -v --asyncio-mode=auto tests
   requires:
     - pip
+    - pytest
+    - pytest-asyncio
+    - mock
+    - requests
 
 about:
   home: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-storage-control
   summary: Google Cloud Storage Control API client library
   license: Apache-2.0
+  license_family: Apache
   license_file: LICENSE
+  description: |
+    Storage Control API: Lets you perform metadata-specific, controlplane, and long-running operations apart from the Storage API.
+    Separating these operations from the Storage API improves API standardization and lets you run faster releases.
+  dev_url: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-storage-control
+  doc_url: https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-storage-control/docs
 
 extra:
   recipe-maintainers:
